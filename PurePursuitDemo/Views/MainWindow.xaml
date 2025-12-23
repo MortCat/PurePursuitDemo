@@ -1,0 +1,143 @@
+﻿<Window x:Class="PurePursuitDemo.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:PurePursuitDemo.ViewModels"
+        xmlns:views="clr-namespace:PurePursuitDemo.Views"
+        Title="Pure Pursuit Demo" Width="1320" Height="820"
+        Background="{StaticResource BgBrush}"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top bar -->
+        <Border Grid.Row="0" Background="{StaticResource CardBrush}" CornerRadius="18" Padding="14"
+                BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+            <DockPanel LastChildFill="True">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Pure Pursuit Demo" Style="{StaticResource H1Text}"/>
+                    <TextBlock Text="Path、Yaw、look-ahead、Circle/Degree" Style="{StaticResource SubText}"/>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <RadioButton Content="Draw Path" Style="{StaticResource SegmentItem}" GroupName="mode"
+                                 IsChecked="{Binding Tool.IsDrawPathMode}"/>
+                    <Border Width="8" Background="Transparent"/>
+                    <RadioButton Content="Place Vehicle" Style="{StaticResource SegmentItem}" GroupName="mode"
+                                 IsChecked="{Binding Tool.IsPlaceVehicleMode}"/>
+                    <Border Width="8" Background="Transparent"/>
+                    <RadioButton Content="Pick Lookahead" Style="{StaticResource SegmentItem}" GroupName="mode"
+                                 IsChecked="{Binding Tool.IsPickLookaheadMode}"/>
+                    <Border Width="8" Background="Transparent"/>
+                    <RadioButton Content="Pan/Zoom" Style="{StaticResource SegmentItem}" GroupName="mode"
+                                 IsChecked="{Binding Tool.IsPanMode}"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="360"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" ClipToBounds="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left tool strip -->
+                <Border Grid.Column="0" Background="{StaticResource CardBrush}" CornerRadius="18,0,0,18"
+        BorderBrush="{StaticResource LineBrush}" BorderThickness="1,1,0,3" Padding="10">
+                    <StackPanel>
+                        <Button Style="{StaticResource PrimaryButton}" Content="Clear"
+                Command="{Binding ClearAllCommand}" />
+                        <Border Height="10" Background="Transparent"/>
+                        <CheckBox Content="Grid" IsChecked="{Binding Canvas.ShowGrid}" Margin="2,6,0,0" FontSize="11"/>
+                        <CheckBox Content="Circle" IsChecked="{Binding Canvas.ShowCircle}" Margin="2,6,0,0" FontSize="11"/>
+                        <CheckBox Content="Angles" IsChecked="{Binding Canvas.ShowAngles}" Margin="2,6,0,0" FontSize="11"/>
+                        <CheckBox Content="Local Axes" IsChecked="{Binding Canvas.ShowLocalAxes}" Margin="2,6,0,0" FontSize="11"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Center canvas -->
+                <Border Grid.Column="1" CornerRadius="0,18,18,0"
+        BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,5,3"
+        Background="{StaticResource CardBrush}" Padding="8"
+        >
+                    <views:DemoCanvasControl DataContext="{Binding}"/>
+                </Border>
+
+            </Grid>
+
+            
+
+            <!-- Right parameter panel -->
+            <StackPanel Grid.Column="1" Margin="14,0,0,0">
+                <Border Style="{StaticResource CardBorder}">
+                    <StackPanel>
+                        <TextBlock Text="Parameters" Style="{StaticResource H2Text}"/>
+
+                        <Border Height="10" Background="Transparent"/>
+
+                        <TextBlock Text="Lookahead Distance Ld (m)" Style="{StaticResource SubText}"/>
+                        <Slider Minimum="0.2" Maximum="3.0" Value="{Binding Params.LookaheadDistance, Mode=TwoWay}" />
+
+                        <Border Height="10" Background="Transparent"/>
+
+                        <TextBlock Text="Linear Speed v (m/s)" Style="{StaticResource SubText}"/>
+                        <Slider Minimum="0.0" Maximum="2.0" Value="{Binding Params.LinearSpeed, Mode=TwoWay}" />
+
+                        <Border Height="10" Background="Transparent"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <StackPanel Width="155">
+                                <TextBlock Text="TrackWidth (m)" Style="{StaticResource SubText}"/>
+                                <TextBox Text="{Binding Params.TrackWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <Border Width="10" Background="Transparent"/>
+                            <StackPanel Width="155">
+                                <TextBlock Text="WheelBase (m)" Style="{StaticResource SubText}"/>
+                                <TextBox Text="{Binding Params.WheelBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Height="12" Background="Transparent"/>
+
+                <Border Style="{StaticResource CardBorder}">
+                    <StackPanel>
+                        <TextBlock Text="Result" Style="{StaticResource H2Text}"/>
+                        <Border Height="10" Background="Transparent"/>
+
+                        <TextBlock Text="{Binding Canvas.ResultText}" Style="{StaticResource BodyText}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Height="12" Background="Transparent"/>
+
+                <Border Style="{StaticResource CardBorder}">
+                    <StackPanel>
+                        <TextBlock Text="Hints" Style="{StaticResource H2Text}"/>
+                        <Border Height="8" Background="Transparent"/>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SubText}" Text="• Draw Path：左鍵新增點、拖曳點" TextWrapping="Wrap"/>
+                            <TextBlock Style="{StaticResource SubText}" Text="• Place Vehicle：左鍵放車、拖曳車頭前方小圓點旋轉" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                            <TextBlock Style="{StaticResource SubText}" Text="• Pick Lookahead：左鍵指定 look-ahead" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                            <TextBlock Style="{StaticResource SubText}" Text="• Pan/Zoom：右鍵拖曳平移、滾輪縮放" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
