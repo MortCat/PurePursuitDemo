@@ -1,7 +1,19 @@
 # PurePursuitDemo
-
+![UI Preview](pure_pursuit_demo.png)
 ## Build
 - .NET 8 SDK
+
+## Math
+1) Transform the look-ahead point into the vehicle frame `(x_local, y_local)`  
+2) Compute the heading angle to that point  
+   - `alpha = atan2(y_local, x_local)`
+3) Convert that angle into curvature (how sharp to turn)  
+   - `kappa = 2 * sin(alpha) / Ld`
+4) Turn curvature into angular speed  
+   - `omega = v * kappa`
+5) Differential-drive wheel speeds (track width = W)  
+   - `vL = v - omega * (W/2)`
+   - `vR = v + omega * (W/2)`
 
 
 ## Usage
