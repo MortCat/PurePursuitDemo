@@ -1,5 +1,5 @@
 # PurePursuitDemo
-![UI Preview](pure_pursuit_demo.png)
+![UI Preview](PurePursuitDemo/pure_pursuit_demo.png)
 ## Build
 - .NET 8 SDK
 
